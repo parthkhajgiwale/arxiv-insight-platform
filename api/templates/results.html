@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+   <div class="navbar">
+    <h2>ArxivInsight</h2>
+</div>
+
+<div class="container">
+
+    <h2>Results for "{{ query }}"</h2>
+
+    <div class="card">
+        <h3>📈 Trends</h3>
+        <div class="graph-container">
+            {{ graph1|safe }}
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>👨‍🔬 Top Authors</h3>
+        <div class="graph-container">
+            {{ graph2|safe }}
+        </div>
+    </div>
+
+    {% if graph3 %}
+    <div class="card">
+        <h3>🧠 Topics</h3>
+        <div class="graph-container">
+            {{ graph3|safe }}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h3>📄 Papers</h3>
+
+        {% for paper in papers %}
+            <div class="paper">
+                <h4>{{ paper.title }}</h4>
+                <p><b>Authors:</b> {{ paper.authors }}</p>
+                <p><b>Date:</b> {{ paper.published }}</p>
+                <a href="{{ paper.link }}" target="_blank">Read Paper</a>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>
