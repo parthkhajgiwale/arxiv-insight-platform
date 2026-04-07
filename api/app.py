@@ -6,13 +6,13 @@ import plotly.express as px
 app = Flask(__name__)
 
 
-# 🏠 Home Page
+# Home Page
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# 🔍 Search Page
+# Search Page
 @app.route("/search")
 def search():
     query = request.args.get("q", "")
@@ -30,9 +30,7 @@ def search():
     if filtered_df.empty:
         return render_template("results.html", papers=[], query=query)
 
-    # =========================
-    # 📈 GRAPH 1 — Trend (Line Chart)
-    # =========================
+    # GRAPH 1 — Trend
     filtered_df["published"] = pd.to_datetime(filtered_df["published"])
 
     trend_df = (
@@ -58,9 +56,7 @@ def search():
 
     graph1 = fig1.to_html(full_html=False)
 
-    # =========================
-    # 👨‍🔬 GRAPH 2 — Top Authors
-    # =========================
+    # GRAPH 2 — Top Authors
     authors_series = filtered_df["authors"].str.split(", ").explode()
     top_authors = authors_series.value_counts().head(8).sort_values()
 
@@ -85,9 +81,7 @@ def search():
 
     graph2 = fig2.to_html(full_html=False)
 
-    # =========================
-    # 🧠 GRAPH 3 — Topic Distribution
-    # =========================
+    # GRAPH 3 — Topic Distribution
     if "topic" in filtered_df.columns:
         topic_counts = (
             filtered_df["topic"]
@@ -119,9 +113,7 @@ def search():
     else:
         graph3 = None
 
-    # =========================
-    # 📦 Convert papers
-    # =========================
+    # Convert papers
     papers = filtered_df.to_dict(orient="records")
 
     return render_template(
